@@ -1,18 +1,21 @@
-import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Coffee } from './entities/coffee.entity';
 import { ParseIntPipe } from '@nestjs/common';
+import { CreateCoffeeInput } from './dto/create-coffee.input';
+import { CoffeesService } from './coffees.service';
 
 @Resolver()
 export class CoffeesResolver {
+  constructor(private readonly coffeesService: CoffeesService) {}
+
   @Query(() => [Coffee], { name: 'coffees', description: 'Show All coffees' })
   async coffees() {
-    return [];
+    return this.coffeesService.findAll();
   }
 
   @Query(() => Coffee, {
     name: 'coffee',
     description: 'Find coffee by ID',
-    nullable: true,
   })
   async findOne(
     @Args(
@@ -23,8 +26,15 @@ export class CoffeesResolver {
       },
       ParseIntPipe,
     )
-    id: string,
+    id: number,
   ) {
-    return null;
+    return this.coffeesService.findOne(id);
+  }
+
+  @Mutation(() => Coffee, { name: 'createCoffee' })
+  async create(
+    @Args('createCoffeeInput') createCoffeeInput: CreateCoffeeInput,
+  ) {
+    return this.coffeesService.create(createCoffeeInput);
   }
 }
