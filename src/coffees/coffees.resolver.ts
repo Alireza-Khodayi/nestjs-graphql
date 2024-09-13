@@ -33,14 +33,20 @@ export class CoffeesResolver {
     return this.coffeesService.findOne(id);
   }
 
-  @Mutation(() => Coffee, { name: 'createCoffee' })
+  @Mutation(() => Coffee, {
+    name: 'createCoffee',
+    description: 'Create new coffee',
+  })
   async create(
     @Args('createCoffeeInput') createCoffeeInput: CreateCoffeeInput,
   ) {
     return this.coffeesService.create(createCoffeeInput);
   }
 
-  @Mutation(() => Coffee, { name: 'updateCoffee' })
+  @Mutation(() => Coffee, {
+    name: 'updateCoffee',
+    description: 'Update coffee by ID',
+  })
   async update(
     @Args('id', ParseIntPipe) id: number,
     @Args('updateCoffeeInput') updateCoffeeInput: UpdateCoffeeInput,
@@ -48,7 +54,10 @@ export class CoffeesResolver {
     return this.coffeesService.update(id, updateCoffeeInput);
   }
 
-  @Mutation(() => Coffee, { name: 'removeCoffee' })
+  @Mutation(() => Coffee, {
+    name: 'removeCoffee',
+    description: 'Remove coffee by ID',
+  })
   async remove(@Args('id', ParseIntPipe) id: number) {
     return this.coffeesService.remove(id);
   }
