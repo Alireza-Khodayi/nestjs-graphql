@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { Tea } from './teas/entities/tea.entity/tea.entity';
 import { DrinksResolver } from './drinks/drinks.resolver';
+import { PubSubModule } from './pub-sub/pub-sub.module';
 
 @Module({
   imports: [
@@ -20,9 +21,11 @@ import { DrinksResolver } from './drinks/drinks.resolver';
         // numberScalarMode: 'integer',
         orphanedTypes: [Tea],
       },
+      installSubscriptionHandlers: true,
     }),
     CoffeesModule,
     CommonModule,
+    PubSubModule,
   ],
   controllers: [AppController],
   providers: [AppService, DrinksResolver],
