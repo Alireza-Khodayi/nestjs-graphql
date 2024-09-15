@@ -1,16 +1,19 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Flavor } from './flavor.entity';
+import { Drink } from 'src/common/interfaces/drink.interface';
+import { CoffeeType } from 'src/common/enums/coffee-type.enum';
 
 @Entity()
-@ObjectType({ description: 'Coffee model' })
-export class Coffee {
+@ObjectType({ description: 'Coffee model', implements: () => Drink })
+export class Coffee implements Drink {
   @PrimaryGeneratedColumn()
   @Field(() => ID, { description: 'A unique identifier' })
   id: number;
@@ -24,4 +27,10 @@ export class Coffee {
   @JoinTable()
   @ManyToMany(() => Flavor, (flavor) => flavor.coffees, { cascade: true })
   flavors?: Flavor[];
+
+  @CreateDateColumn()
+  createdAt?: Date;
+
+  @Column({ nullable: true })
+  type?: CoffeeType;
 }

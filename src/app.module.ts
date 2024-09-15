@@ -7,6 +7,8 @@ import { join } from 'path';
 import { CoffeesModule } from './coffees/coffees.module';
 import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
+import { Tea } from './teas/entities/tea.entity/tea.entity';
+import { DrinksResolver } from './drinks/drinks.resolver';
 
 @Module({
   imports: [
@@ -14,14 +16,15 @@ import { CommonModule } from './common/common.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'), // Code First Approach Needs This
-      // buildSchemaOptions: {
-      //   numberScalarMode: 'integer',
-      // },
+      buildSchemaOptions: {
+        // numberScalarMode: 'integer',
+        orphanedTypes: [Tea],
+      },
     }),
     CoffeesModule,
     CommonModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DrinksResolver],
 })
 export class AppModule {}
